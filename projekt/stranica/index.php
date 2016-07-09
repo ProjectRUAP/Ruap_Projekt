@@ -1,9 +1,9 @@
 <?php
 
  $block = "Ovo otvara index.php!";
- $pages = "pages/"
- $images = "images/"
- $data = "data/"
+ $pages = "pages/";
+ $images = "images/";
+ $data = "data/";
  
  $kon_var =@explode("&",$_SERVER["QUERY_STRING"]);
  $vars = array();
