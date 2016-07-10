@@ -162,7 +162,7 @@ int main(void){
               
               for(i = 0; i < iklasa-1; i++)
                   for(j = 1; j < iklasa; j++)
-                    if(strcmp(klasa_tekst[i],klasa_tekst[j]) && i+j % 2 == 0){
+                    if(strcmp(klasa_tekst[i],klasa_tekst[j]) && i % 2 == 0){
                          for(c = 0; c < 18 ; c++){
                              //printf("%d,%d\n",i,j);
                             // printf("%c,",(klasa[i][c]>=klasa[j][c])?klasa[i][c]:klasa[j][c]);
@@ -175,7 +175,7 @@ int main(void){
                     
               for(i = 0; i < iklasa-1; i++)
                   for(j = 1; j < iklasa; j++)
-                    if(strcmp(klasa_tekst[i],klasa_tekst[j])&& i+j % 2 == 0){
+                    if(strcmp(klasa_tekst[i],klasa_tekst[j])&& i % 2 == 0){
                          char flag = 0;                                      
                          for(c = 0; c < 18 ; c++){
                              //printf("%d,%d\n",i,j);
@@ -196,7 +196,7 @@ int main(void){
                               //printf("%c",t);
                               //getchar();                                        
                               }while(t != '\n');
-                              fputc ( '\n' , f2 );
+                              //fputc ( '\n' , f2 );
                               }
                          //getchar(); 
                     }
