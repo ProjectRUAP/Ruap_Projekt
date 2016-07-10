@@ -87,7 +87,7 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 <div id="popup">
 </div>
 <div align="center">
-<table class="frame" style="height: auto; width: 1100px">
+<table class="frame" style="height: auto; width: 70%">
 <tr>
 <td id="top" colspan="2" style="height: 215px">
 </td>
