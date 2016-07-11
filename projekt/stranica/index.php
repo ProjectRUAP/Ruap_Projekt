@@ -1,4 +1,5 @@
 <?php
+session_start();
 
  $block = "Ovo otvara index.php!";
  $pages = "pages/";
@@ -18,7 +19,7 @@
 
  $cin=0;
  $cout=0;
- $max_time = 180;
+ $max_time = 15;
  
  $dbhost = "eu-cdbr-azure-north-e.cloudapp.net";
  $dbase = "project_iq_kviz";
@@ -31,10 +32,7 @@
  if(empty( $kontrola))  $kontrola = "pocetna";
  $loginz = false;
  $logerr = 0;
-
- if (isset($_COOKIE["user"])){ 
-		
-				
+			
 		if(!($con = @mysql_connect($dbhost, $dbuser, $dbpass)))
 		  $logerr = "Neuspjelo spajanje na MySQL!";
 		mysql_set_charset('utf8',$con);
@@ -44,11 +42,12 @@
 		  // Spoj na bazu
 		  
 		}
- }
- else{
-	  session_start();
-	  $kontrola = "pocetna";
- }
+		
+if (!isset($_SESSION["backsite"]))
+		$kontrola = "busy";
+if ($_SESSION["backsite"] == "zadatak" && $_SESSION["time"] < time()-$max_time)
+		$kontrola = "statistika";	
+ 
 /*	   
 if (isset($_COOKIE["user"])){
    if($kontrola == "logout"){
@@ -70,7 +69,7 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 			echo '';
 			}
 	}*/
-	
+if( $logerr != 0) echo $logerr;	
 ?>
 
 <html>
@@ -87,31 +86,29 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 <div id="popup">
 </div>
 <div align="center">
-<table class="frame" style="height: auto; width: 70%">
+<table class="frame" style="padding-top: 10%; height: 80%; width: 70%">
 <tr>
-<td id="top" colspan="2" style="height: 215px">
-</td>
-</tr>
-<tr style="height: auto">
-<td id="side" style="width: 150px">
-</td>
-<td id="body">
+<td id="top" colspan="2" style="height: 20%">
 <?php
-// body
+// Header
 
-if($kontrola=="nazad"){
-	$kontrola=$vars[back];
-	@include $pages.$vars[back].".php";
-}
-else {if(!is_file($pages.$kontrola.".php")) @include $pages."busy.php"; else @include $pages.$kontrola.".php";}
 ?>
-
+<h1> IQ KVIZ </h1>
 </td>
 </tr>
-<tr id="bottom"style="height: 50px">
+<tr >
+<td id="body" style="height: 70%; text-align: left; vertical-align: text-top;">
+<?php
+// Body
+@include $pages.$kontrola.".php";
+?>
+</td>
+</tr>
+<tr id="bottom"style="height: 10%">
 <td colspan="2" align="center">
 <?php
-// bottom
+// Bottom
+
 ?>
 </td>
 </tr>
