@@ -12,3 +12,38 @@ background-color: gray;
 	border-color: rgb(200,200,200);
 	border-radius: 2px;
 }
+
+.btn_1{
+	float: right; 
+	margin:10;
+	font-size: 14px;
+}
+
+.pol1{
+	position: relative; 
+	width:auto; 
+	height:100%; 
+	padding: 5%; 
+}
+
+.pol2{
+	border: 1px solid rgb(200,200,200);
+}
+
+.zaddiv{
+	position: relative; 
+	width:auto; 
+	height:20%; 
+	padding-left: 5%; 
+	text-align: center;
+}
+
+.box1{
+	position: relative; 
+	float:left;
+	padding-left: 30px;
+}
+
+.box1 tr td{
+	padding: 8px;
+}

@@ -19,13 +19,14 @@ session_start();
 
  $cin=0;
  $cout=0;
- $max_time = 15;
+ $max_time = 20;
+ $max_zad = 2;
  
  $dbhost = "eu-cdbr-azure-north-e.cloudapp.net";
  $dbase = "project_iq_kviz";
- $db_testovi = $dbase."testovi";
- $db_zadaci = $dbase."zadaci";
- $db_data =  $dbase."data";
+ $db_testovi = $dbase.".testovi";
+ $db_zadaci = $dbase.".zadaci";
+ $db_data =  $dbase.".data";
  $dbuser = "bb3e7efc984029";
  $dbpass = "a0f2f9c8";
  
@@ -40,7 +41,20 @@ session_start();
 		  $logerr = "Neuspjelo spajanje na bazu podataka!";
 		else{
 		  // Spoj na bazu
-		  
+		  if($_SESSION["backsite"] == "pocetna"){
+			$_SESSION["zadaci"] = array();
+			$query= "SELECT * FROM ".$db_zadaci." WHERE 1";
+			if (!($q=@mysql_query($query)) && !$logerr)
+				$logerr = "Neuspjelo slanje upita bazi!";
+			if (@mysql_num_rows($q)==0 && !$logerr)
+				$logerr = "Prazan red!";
+			else if(!$logerr){
+				while(($redak = @mysql_fetch_array($q) )) {
+					array_push($_SESSION["zadaci"], $redak);
+					}
+					shuffle( $_SESSION["zadaci"]);
+				}
+			}
 		}
 		
 if (!isset($_SESSION["backsite"]))
@@ -69,14 +83,14 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 			echo '';
 			}
 	}*/
-if( $logerr != 0) echo $logerr;	
+if( $logerr > 0) echo $logerr;	
 ?>
 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>IQ Kviz</title>
-<link rel="SHORTCUT ICON" href="image/favicon.ico">
+<link rel="SHORTCUT ICON" href="<?php echo $images;?>favicon.ico">
 <script type="text/jscript" src="data/jquery-1.7.2.min.js"></script>
 <script type="text/jscript" src="data/javascript.js"></script>
 <link href="data/style.css" rel="stylesheet" type="text/css">
