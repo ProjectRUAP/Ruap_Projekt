@@ -159,7 +159,7 @@ int main(void){
                    }
               row++;
               }while(!feof(f));
-              /*
+              
               for(i = 0; i < iklasa-1; i++)
                   for(j = 1; j < iklasa; j++)
                     if(strcmp(klasa_tekst[i],klasa_tekst[j]) && (i % 7 == 0 || j % 7 == 0)){
