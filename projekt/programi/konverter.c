@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define FUNKC "conv"
-#define DEST "dest.csv"
+#define DEST "dest2v.csv"
 #define SIZE 128
 #define COUNT 2000
 
@@ -101,7 +101,7 @@ char process(){
 
 int main(void){
     srand(time(NULL));
-    strcpy(buffer,"conv Testovi.csv");
+    strcpy(buffer,"conv Testovi2v.csv");
     char t;
     int i,j,c;
     iklasa = 0;
@@ -159,10 +159,10 @@ int main(void){
                    }
               row++;
               }while(!feof(f));
-              
+              /*
               for(i = 0; i < iklasa-1; i++)
                   for(j = 1; j < iklasa; j++)
-                    if(strcmp(klasa_tekst[i],klasa_tekst[j]) && i % 7 == 0){
+                    if(strcmp(klasa_tekst[i],klasa_tekst[j]) && (i % 7 == 0 || j % 7 == 0)){
                          for(c = 0; c < 18 ; c++){
                              //printf("%d,%d\n",i,j);
                             // printf("%c,",(klasa[i][c]>=klasa[j][c])?klasa[i][c]:klasa[j][c]);
