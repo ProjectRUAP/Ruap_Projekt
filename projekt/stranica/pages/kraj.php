@@ -2,7 +2,6 @@
 if(empty($block))
 	header("Location: ?error");
 
-
 $_SESSION["backsite"] = "kraj";
 
 ?>

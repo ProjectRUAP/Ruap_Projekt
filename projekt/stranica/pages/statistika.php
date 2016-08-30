@@ -24,8 +24,6 @@ if($_SESSION["backsite"] == "zadatak"){
 	if (!($q=@mysql_query($query)) && !$logerr)
         $logerr = "1Neuspjelo slanje upita bazi!";
 
-//echo (array_keys($_SESSION["rjesenja"],$_SESSION["PCodabir"])[0]-4).'<br>';
-//echo $_SESSION["zadaci"][$_SESSION["brojac"]][0].'<br>';
 $query= "SELECT count(val) as count FROM ".$db_data." WHERE val =".(array_keys($_SESSION["rjesenja"],$_SESSION["PCodabir"])[0]-4)." AND ".
 										  "zadatak =".($_SESSION["zadaci"][$_SESSION["brojac"]][0]);
     if (!($q=@mysql_query($query)) && !$logerr)
@@ -49,16 +47,14 @@ $query= "SELECT count(val) as count FROM ".$db_data." WHERE zadatak =".($_SESSIO
 			$_SESSION["postotak"] = floor($Kistih/$redak[0]*100);
 	} else echo $logerr;
 	
-
 }
 	
 $_SESSION["backsite"] = "statistika";
 if( $logerr != 0) echo $logerr;	
 ?>
 
-
 <div class="pol1">
-<div class="pol2" style="width: 100%; height: 15%; top:1%;">
+<div class="pol2" style="width: 100%; height: 50px; top:1%;">
 <h2 style="position: relative; float: left; margin:10">Statistika ( <?php echo ($_SESSION["brojac"]+1).' / '.($_SESSION["max_zad"]);?> ):</h2>
 </div>
 
@@ -115,13 +111,13 @@ if( $logerr != 0) echo $logerr;
 </tr>
 <tr>
 	<td colspan="2">
-	<h3>Ostali igraći izabrali kao vi:</h3>
+	<h3 style="margin-top: 10px;">Koliko vas je izabralo isti odgovor:</h3>
 	</td>
 </tr>
 <tr>
 	<td colspan="2" align="center">
 	<div style="border: 1px solid; height: 12px; width: 60%;">
-	<div style="float:left; background-color:blue; width: <?php echo $_SESSION["postotak"]; ?>%; height:12px">
+	<div style="float:left; background-color:darkblue; width: <?php echo $_SESSION["postotak"]; ?>%; height:12px">
 	</div>
 	</div>
 	</td>

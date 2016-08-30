@@ -22,7 +22,6 @@ else if($_SESSION["backsite"] == "statistika"){
 
 $_SESSION["backsite"] = "zadatak";
 $timer = $_SESSION["time_old"]+$max_time - $_SESSION["time"];
-//echo $_SESSION["brojac"];
 if( $logerr != 0) echo $logerr;	
 ?>
 
@@ -48,7 +47,7 @@ $(document).ready(function(){
 
 
 <div class="pol1">
-<div class="pol2" style="width: 100%; height: 15%; top:1%;">
+<div class="pol2" style="width: 100%; height: 50px; top:1%;">
 <h2 style="position: relative; float: left; margin:10">Zadatak ( <?php echo ($_SESSION["brojac"]+1).' / '.($_SESSION["max_zad"]);?> ):</h2>
 <h3 id="clock" style="float:right; margin:10">0:00</h3>
 <h3 style="float:right; margin:10">Vrijeme: </h3>
@@ -56,7 +55,6 @@ $(document).ready(function(){
 <form id="next" action="?statistika" method="post">
 <?php
 //zadatak
-//echo $_SESSION["zadaci"][$_SESSION["brojac"]]["p1"];
 echo '<div class="zaddiv" align="center" style="text-align: center;">';
 for($i = 2;$i < 9; $i++){
 	if($i<5) {$jj = 0; $_SESSION["rjesenja"] = $ii = array($i=>0);}
@@ -67,7 +65,6 @@ for($i = 2;$i < 9; $i++){
 		shuffle($ii);
 	}
 	else $jj++;
-	//echo print_r(array_keys($_SESSION["rjesenja"]));
 	($i==4)? $c = 2:$c = 1;
 	if($i==5){
 		echo '</div>';

@@ -1,7 +1,5 @@
 <?php
 
-
-
 $kon_var =@explode("&",$_SERVER["QUERY_STRING"]);
  $vars = array();
  $test = explode("=",$kon_var[0]);
@@ -20,7 +18,6 @@ session_start();
  $images = "images";
  $data = "data";
  
-
  $cin=0;
  $cout=0;
  $max_time = 20;
@@ -35,7 +32,6 @@ session_start();
  $db_data =  $dbase.".bgdata";
  $dbuser = "bb3e7efc984029";
  $dbpass = "a0f2f9c8";
- 
  
  if(empty( $kontrola))  $kontrola = "pocetna";
  $loginz = false;
@@ -74,31 +70,6 @@ session_start();
 		$_POST["choice"] = -1;
 		}
 	}
-else	
-		//$kontrola = "busy";
-			
- 
-/*	   
-if (isset($_COOKIE["user"])){
-   if($kontrola == "logout"){
-   setcookie("user", "", time()-900);
-   }
-   else{
-   
-   }
-*/
-/*
-$query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
-    if (!($q=@mysql_query($query)) && !$logerr)
-        $logerr = "Neuspjelo slanje upita bazi!";
-    if (@mysql_num_rows($q)==0 && !$logerr)
-      $logerr = "Prazan red!";
-    else if(!$logerr){
-      while(($redak = @mysql_fetch_array($q) )) 
-		  if($redak['nick']){
-			echo '';
-			}
-	}*/
 
 ?>
 
@@ -118,24 +89,24 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 <div align="center">
 <table class="frame" style="padding-top: 5%; height: 90%; width: 70%">
 <tr>
-<td id="top" colspan="2" style="height: 15%">
+<td id="top" colspan="2" style="height: 15%; background-color: #dedeff">
 <?php
 // Header
 
 ?>
-<h1> IQ KVIZ </h1>
+<h1 id="naslov"> IQ KVIZ </h1>
 </td>
 </tr>
 <tr >
-<td id="body" style="height: 75%; text-align: left; vertical-align: text-top;">
+<td id="body" style="height: 75%; text-align: left; vertical-align: text-top; background-color: #eeeeff"">
 <?php
 // Body
 @include $pages."/".$kontrola.".php";
 ?>
 </td>
 </tr>
-<tr id="bottom"style="height: 10%">
-<td colspan="2" align="center">
+<tr>
+<td colspan="2" align="center" id="bottom" style="height: 10%; background-color: #dedeff">
 <?php
 // Bottom
 
