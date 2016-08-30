@@ -8,15 +8,32 @@ if ($_POST['action'] == "Exit") {
 $_SESSION["backsite"] = "statistika";
 if( $logerr != 0) echo $logerr;	
 
+if(empty($_POST["choice"]))
+	$_POST["choice"] = -1;
 
+$_SESSION["PCodabir"] = $_POST["choice"];
+
+@include "azurefetch.php";
 
 ?>
 
 
 <div class="pol1">
-<h1>Statistika</h1>
+<h2>Statistika ( <?php echo ($_SESSION["brojac"]+1).' / '.($_SESSION["max_zad"]);?> ):</h2>
 
-<p>asd</p>
+<p><?php
+
+echo "a:".$_SESSION["rjesenja"][8]."</br>";
+echo "b:".$_SESSION["PCodabir"]."</br>";
+echo "c:".$_SESSION["AIodabir"]."</br>";
+
+if($_SESSION["rjesenja"][8] == $_SESSION["PCodabir"])
+	$_SESSION["PCC"]++;
+if($_SESSION["rjesenja"][8] == $_SESSION["AIodabir"])
+	$_SESSION["AIC"]++;
+
+
+?></p>
 
 <form id="next" action="?zadatak" method="post">
 
