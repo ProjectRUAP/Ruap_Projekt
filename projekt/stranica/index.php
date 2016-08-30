@@ -25,12 +25,14 @@ session_start();
  $cout=0;
  $max_time = 20;
  $max_zad = 10;
+ $empty = "white";
+ $fill = "black";
  
  $dbhost = "eu-cdbr-azure-north-e.cloudapp.net";
  $dbase = "project_iq_kviz";
  $db_testovi = $dbase.".testovi";
  $db_zadaci = $dbase.".zadaci";
- $db_data =  $dbase.".data";
+ $db_data =  $dbase.".bgdata";
  $dbuser = "bb3e7efc984029";
  $dbpass = "a0f2f9c8";
  
@@ -64,7 +66,7 @@ session_start();
 					if($max_zad > count($_SESSION["zadaci"]))
 							$max_zad = count($_SESSION["zadaci"]);
 					 $_SESSION["max_zad"] = $max_zad;
-				}
+				} else echo $logerr;
 			}
 		}
 	if ($_SESSION["backsite"] == "zadatak" && $_SESSION["time"] < time()-$max_time){
@@ -73,7 +75,7 @@ session_start();
 		}
 	}
 else	
-		$kontrola = "busy";
+		//$kontrola = "busy";
 			
  
 /*	   
@@ -97,7 +99,7 @@ $query= "SELECT * FROM 1354734_web.korisnik WHERE 1";
 			echo '';
 			}
 	}*/
-if( $logerr > 0) echo $logerr;	
+
 ?>
 
 <html>
@@ -114,9 +116,9 @@ if( $logerr > 0) echo $logerr;
 <div id="popup">
 </div>
 <div align="center">
-<table class="frame" style="padding-top: 10%; height: 80%; width: 70%">
+<table class="frame" style="padding-top: 5%; height: 90%; width: 70%">
 <tr>
-<td id="top" colspan="2" style="height: 20%">
+<td id="top" colspan="2" style="height: 15%">
 <?php
 // Header
 
@@ -125,7 +127,7 @@ if( $logerr > 0) echo $logerr;
 </td>
 </tr>
 <tr >
-<td id="body" style="height: 70%; text-align: left; vertical-align: text-top;">
+<td id="body" style="height: 75%; text-align: left; vertical-align: text-top;">
 <?php
 // Body
 @include $pages."/".$kontrola.".php";
