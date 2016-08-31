@@ -20,7 +20,7 @@ session_start();
  
  $cin=0;
  $cout=0;
- $max_time = 20;
+ $max_time = 35;
  $max_zad = 10;
  $empty = "white";
  $fill = "black";
