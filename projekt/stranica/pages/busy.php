@@ -1,11 +1,12 @@
 <?php
 $_SESSION["backsite"] = "busy";
+
 ?>
 
 
-<div class="pol1">
+<div class="pol1" align="center">
 
-<img src="../<?php echo $images;?>construct.png" style="float:left; height:150px;width:150px;">
+<img src="<?php echo $images;?>/construct.png" style="float:left; height:150px;width:150px;">
 <h1>ISTEKLO VRIJEME</h1>
 <h1>Sessija je prekinuta radi inaktivnosti!<h1>
 <h2>Vratite se na početnu stranicu</h2>
