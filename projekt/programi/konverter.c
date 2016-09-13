@@ -5,9 +5,10 @@
 #include <string.h>
 
 #define FUNKC "conv"
-#define DEST "dest2v.csv"
-#define SIZE 128
+#define DEST "dest5v.csv"
+#define SIZE 256
 #define COUNT 2000
+#define N 3
 
 FILE *f,*f2;
 // i,v,c,n
@@ -15,7 +16,7 @@ char flags[] = {0,0,0,0};
 char strIn[SIZE];
 char fileIn[SIZE];
 char buffer[SIZE];
-char klasa[COUNT][18];
+char klasa[COUNT][N][60];
 int  iklasa = 0;
 char klasa_tekst[COUNT][60];
 char *tklasa;
@@ -80,17 +81,17 @@ char init(char *c){
      }
      
 char process(){
-     int i,c=0,s=0;
+     int i,c=0,s=0,s2=0;
      char tbuff[SIZE];       
      strcpy(tbuff,buffer);
      if(tbuff[0] == '\n') return 0;
      for(i = 0; tbuff[i]; i++){
            if(tbuff[i] != ','){
-             klasa[iklasa][c] = tbuff[i];
-           if(c >= 18)
-             klasa_tekst[iklasa][s++] = tbuff[i];
+             klasa[iklasa][c][s2++] = tbuff[i];
+             if(c >= N)
+                  klasa_tekst[iklasa][s++] = tbuff[i];
              }
-           else c++;
+           else { s2 = 0; c++;}
            }
      tklasa = &klasa[iklasa][0];
      tklasa_tekst = &klasa_tekst[iklasa][0];
@@ -101,7 +102,7 @@ char process(){
 
 int main(void){
     srand(time(NULL));
-    strcpy(buffer,"conv Testovi2v.csv");
+    strcpy(buffer,"conv Testovi5v.csv");
     char t;
     int i,j,c;
     iklasa = 0;
@@ -144,9 +145,11 @@ int main(void){
               buffer[bbb] = 0; 
               if(process()){
                    count++;
-                   for(i = 0; i < 18 ; i++){
+                   for(i = 0; i < N ; i++){
                          //printf("%c,",tklasa[i]);
-                         fprintf(f2,"%c,",tklasa[i]);
+                         for(j = 0; j < 17; j++)
+                               fprintf(f2,"%c",tklasa[i]);
+                         fprintf(f2,",");
                          }
                   // printf("%s\n",tklasa_tekst);
                    fprintf(f2,"%s\n",tklasa_tekst);
@@ -163,7 +166,7 @@ int main(void){
               for(i = 0; i < iklasa-1; i++)
                   for(j = 1; j < iklasa; j++)
                     if(strcmp(klasa_tekst[i],klasa_tekst[j]) /*&& (i % 2 == 0 || j % 2 == 0)*/){
-                         for(c = 0; c < 18 ; c++){
+                         for(c = 0; c < N ; c++){
                              //printf("%d,%d\n",i,j);
                             // printf("%c,",(klasa[i][c]>=klasa[j][c])?klasa[i][c]:klasa[j][c]);
                              fprintf(f2,"%c,",(klasa[i][c]>=klasa[j][c])?klasa[i][c]:klasa[j][c]);
@@ -177,7 +180,7 @@ int main(void){
                   for(j = 1; j < iklasa; j++)
                     if(strcmp(klasa_tekst[i],klasa_tekst[j])&& i % 6 == 0){
                          char flag = 0;                                      
-                         for(c = 0; c < 18 ; c++){
+                         for(c = 0; c < N ; c++){
                              //printf("%d,%d\n",i,j);
                             // printf("%c,",(klasa[i][c]>=klasa[j][c])?klasa[i][c]:klasa[j][c]);
                             if(klasa[i][c] == '1' && klasa[j][c] == '1')
