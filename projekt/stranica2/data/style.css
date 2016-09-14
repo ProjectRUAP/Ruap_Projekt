@@ -1,0 +1,124 @@
+body{
+background-color: rgb(25,45,80);
+font-family: Arial, Helvetica, sans-serif;
+color: rgb(30,30,30);
+}
+
+h1{
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-size:32px;
+}
+
+#naslov{
+	margin: 0;
+	font-size:36px;
+}
+
+input{
+	background-color: #0080ff;
+	color: #ffffff;
+	border: 1px ;
+	border-radius: 5px;
+	-webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+input:hover{
+	background-color: #99ccff;
+	color: #333333;
+}
+
+
+.frame{
+	background-color: rgba(0,0,0,0);
+	text-align: center;
+}
+.frame tr td{
+	border:1px;
+	border-style: ridge;
+	background-color: white;
+	border-color: rgb(200,200,200);
+	border-radius: 2px;
+}
+
+.frame2 tr td{
+	background-color: rgba(0,0,0,0);
+	border:0px;
+}
+
+.btn_1{
+	font-size:20px;	
+	margin:10;
+}
+
+.pol1{
+	position: relative; 
+	width:auto; 
+	height:100%; 
+	padding: 3%; 
+}
+
+.pol2{
+	background-color: rgba(255,255,255,125);
+	border: 1px solid rgb(200,200,200);
+}
+
+.zaddiv{
+	position: relative; 
+	width: 65%; 
+	height: 65px; 
+	padding-left: 5%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	margin-left: 15%; 
+	margin-top: 2%;
+	text-align: center;
+	border: 1px solid;
+}
+
+.box1{
+	position: relative; 
+	float:left;
+	padding-left: 30px;
+}
+
+.box1 tr td{
+	padding: 8px;
+}
+
+.box2{
+
+}
+
+.box2 tr td{
+	border:1px;
+	border-style: ridge;
+	border-color: rgb(200,200,200);
+	border-radius: 2px;
+	padding: 8px;
+}
+
+.box1choice{
+	position: absolute; 
+	margin-left: 30px;
+	left: 0px;
+    top: 0px;
+	width: 60px;
+	height: 60px;
+	border: 2px solid gray;
+	background-color: #eeeeff;
+    color: rgba(0,0,0,0);
+	-webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+	opacity: 0.0;
+    filter: alpha(opacity=0);
+}
+
+
+.box1choice:hover {
+	border: 2px solid gray;
+	background-color: #eeeeff;
+    color: rgba(0,0,0,0);
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+}
