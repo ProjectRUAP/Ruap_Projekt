@@ -18,6 +18,7 @@ session_start();
  $images = "images";
  $data = "data";
  
+ 
  $cin=0;
  $cout=0;
  
@@ -33,7 +34,7 @@ session_start();
  $loginz = false;
  $logerr = 0;
  
-	if(isset($_SESSION["backsite"])){	
+	/*if(isset($_SESSION["backsite"])){	
 		if(!($con = @mysql_connect($dbhost, $dbuser, $dbpass)))
 		  $logerr = "Neuspjelo spajanje na MySQL!";
 		mysql_set_charset('utf8',$con);
@@ -55,11 +56,11 @@ session_start();
 					if($max_zad > count($_SESSION["zadaci"]))
 							$max_zad = count($_SESSION["zadaci"]);
 					 $_SESSION["max_zad"] = $max_zad;
-				} else echo $logerr;*/
+				} else echo $logerr;
 			}
 		}
 	
-	}
+	}*/
 
 ?>
 
@@ -95,14 +96,7 @@ session_start();
 ?>
 </td>
 </tr>
-<tr>
-<td colspan="2" align="center" id="bottom" style="height: 10%; background-color: #dedeff">
-<?php
-// Bottom
 
-?>
-</td>
-</tr>
 </table>
 </div>
 

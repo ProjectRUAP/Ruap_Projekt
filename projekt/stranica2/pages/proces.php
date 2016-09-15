@@ -1,18 +1,115 @@
 <?php
 
-$dimen = 10;
-$image = "../images/plocice/01.jpg"; 
-$dest_image = '../images/plocice/a01.jpg'; 
+$dimen = 256;
+$fplocice = $images."/plocice";
 
-$img = imagecreatetruecolor($dimen,$dimen);
-$org_img = imagecreatefromjpeg($image);
-$ims = getimagesize($image);
-imagecopy($img,$org_img, 0, 0, 20, 20, $dimen, $dimen);
-imagefilter($img, IMG_FILTER_GRAYSCALE);
-imagejpeg($img,$dest_image,90);
+$process = "";
+$picture = 0;
+$CC;
+$histo;
+
+function browseImages($target){
+	
+	if ($handle = opendir($target)) {
+		while (false !== ($file = readdir($handle))) {
+			echo $file." ".is_dir($file)."<br>";
+			/*if(is_dir($file) && strcmp($file,'.') != 0 && strcmp($file,"..") != 0){
+				echo "da";
+				if ($handle2 = opendir($target."/".$file)){
+					while (false !== ($file2 = readdir($handle2))) {
+						echo $file2.", ";
+						//getPicture($target.'/'.$file,1);
+					
+					}echo "<br>";
+				}
+			}*/	
+		}
+	}
+	
+	closedir($handle);
+}
+
+function getPicture($URL, $parts){
+	global $dimen,$CC,$histo;
+	$block = intval($dimen / $parts);
+	$CC = initCoefficients($block);
+	$img = imagecreatetruecolor($block,$block);
+	//$org_img = imagecreatefromjpeg($URL);
+	$org_img =  resize_image($URL,$dimen,$dimen,TRUE);
+	$ims = getimagesize($URL);
+	imagejpeg($org_img,$URL."2.jpg",90);
+	
+	for($i = 0 ; $i < $parts ; $i++){
+		$ii = $i*$block;
+		for($j = 0 ; $j < $parts ; $j++){
+			$jj = $j*$block;
+			imagecopy($img,$org_img, 0, 0, $ii, $jj, $ii+$block, $jj+$block);
+			//imagejpeg($img,$URL.$ii.".jpg",90);
+			applyDCT($img,$block);
+			//$h =applyDCT($img,$block));
+		}
+	}
+	array_multisort($histo,SORT_DESC);
+
+	//var_dump($histo);
+
+}
+
+function saveFile($file,$array){
+	$f = fopen($file, "w");
+	if(is_array($array))
+		foreach($array as $a){
+			fwrite($f, $a.",");
+		}
+	else fwrite($f,$array);
+}
 
 
-echo '<img src="'.$dest_image.'" ><p>';
+function sendFile($file){
+	if (file_exists($file)) {
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename='.basename($file));
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    ob_clean();
+    flush();
+    readfile($file);
+    exit;
+}
+}
+
+function histogram($array, $cols){
+	$stone = array();
+	$hist = array();
+	for($i = 0; $i < $cols; $i++)
+		$hist[$i] = 0;
+	
+	$min = $array[count($array)-1];
+	$max = $array[0];
+	$ln = ($max-$min)/$cols."<br>";
+	
+	echo $min." ".$max." ".$ln;
+	echo ($stone[] = $min)."<br>";
+	for($i = $min; $i < $max; $i += $ln){
+		echo ($stone[] = ($i+$ln))."<br>";
+		
+	}
+	
+	foreach($array as $a){
+		for($i = 0; $i < $cols; $i++){
+			if($a >= $stone[$i] && $a < $stone[$i+1])
+				$hist[$i]++; 
+		}
+	}
+	ksort($hist);
+	return $hist;
+	
+}
+
 
 function getGray($img,$x,$y){
     $col = imagecolorsforindex($img, imagecolorat($img,$x,$y));
@@ -20,48 +117,51 @@ function getGray($img,$x,$y){
 }
 
 function  initCoefficients($size) {
-  for ($i=1;$i< $size ;$i++) 
-    {
-    $c[$i]=1;
+	for ($i=1;$i< $size ;$i++){
+		$c[$i]=1;
     }
     $c[0]=1/sqrt(2.0);
-return $c;
+	return $c;
 }
 
-function applyDCT($img) {
-    $color=array();
-	$N1 = imagesx($img);
-    $N2 = imagesy($img);
-	
-	for($i=0;$i<$N1;$i++)
+function applyDCT($img,$block) {
+	global $CC,$histo;
+    //$color=array();
+	//$ii = 0;
+	/*for($i=0;$i<$block;$i++)
     {
-        for($j=0;$j<$N2;$j++)
+        for($j=0;$j<$block;$j++)
         {
             $color[]=getGray($img,$i,$j);
         }
-    }
-
+    }*/
 	
-    $c= initCoefficients($N1);
     $sum=0;
-    for ($u=0;$u<$N1;$u++) {
-    for ($v=0;$v<$N2;$v++) {
+	//$sum2=0;
+	$u = 0;
+	//$v = 0;
+    //for ($u=0;$u<128;$u++) {
+		for ($v=0;$v<128;$v++) {
 
-        for ($i=0;$i<$N1;$i++) {
-            for ($j=0;$j<$N2;$j++) {
-                $sum += ($c[$i]*$c[$j])*cos(((2*$i+1)*$u*pi()/(2.0*$N1)))*cos(((2*$j+1)*$v*pi()/(2.0*$N1)))*($color[$i*$N1+$j]);//imagecolorat($img, $i, $j));
-          }
-        }
-
-        $sum *=sqrt(2/$N1)*sqrt(2/$N1);
-        $F[$u][$v] = $sum;
-      }
-    }
-    return $F;
+			for ($i=0;$i<$block;$i++) {
+				for ($j=0;$j<$block;$j++) {
+					$sum += ($CC[$i]*$CC[$j])*cos(((2*$i+1)*$u*pi()/(2.0*$block)))*cos(((2*$j+1)*$v*pi()/(2.0*$block)))*(getGray($img,$i,$j));//$color[$i*$N1+$j]);//imagecolorat($img, $i, $j));
+				}
+			}
+			//$ii++;
+			$sum *=(2/$block);
+			//$F[$u][$v] = $sum;
+			$histo[] = $sum;
+		  }
+			
+    //}
+	//array_multisort($histogram,SORT_DESC);
+	//$histogram = array_slice($histogram,0,128);
+    //return array_chunk($histogram,128);
 }
 
-var_dump(applyDCT($img));
-echo '<br><br>';
+/*var_dump(applyDCT($img));
+echo '<br><br>';*/
 
 function RGB($image){
 	global $dimen;
@@ -75,7 +175,7 @@ function RGB($image){
 			$b = $rgb & 0xFF;
 
 			$width_arr = array($r, $g, $b) ;
-			$height_array[] = $width_arr ; 
+			$height_arr[] = $width_arr ; 
 		} 
 
 		$colors[$y] = $height_arr ;
@@ -83,56 +183,31 @@ function RGB($image){
 	return $colors;
 }
 
-//var_dump(RGB($img));
-echo '<br><br>';
-
-function dct1D($in){
-    $results = array();
-    $N = count($in);
-    for($k = 0; $k < $N; $k++){
-        $sum = 0;
-        for($n = 0; $n < $N; $n++){
-             $sum += $in[$n] * cos($k * pi() * ($n + 0.5) / ($N));
+function resize_image($file, $w, $h, $crop=FALSE) {
+    list($width, $height) = getimagesize($file);
+    $r = $width / $height;
+    if ($crop) {
+        if ($width > $height) {
+            $width = ceil($width-($width*abs($r-$w/$h)));
+        } else {
+            $height = ceil($height-($height*abs($r-$w/$h)));
         }
-        $sum *= sqrt(2 / $N);
-        if($k == 0){
-            $sum *= 1 / sqrt(2);
+        $newwidth = $w;
+        $newheight = $h;
+    } else {
+        if ($w/$h > $r) {
+            $newwidth = $h*$r;
+            $newheight = $h;
+        } else {
+            $newheight = $w/$r;
+            $newwidth = $w;
         }
-        $results[$k] = intval($sum);
     }
-    return $results;
+    $src = imagecreatefromjpeg($file);
+    $dst = imagecreatetruecolor($newwidth, $newheight);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+    return $dst;
 }
-
-//var_dump(dct1D(array(1,2,3,4,5,6,7,8,9,10)));
-echo '<br><br>';
-
-function optimizedImgDTC($img){
-    $results = array();
-
-    $N1 = imagesx($img);
-    $N2 = imagesy($img);
-
-    $rows = array();
-    $row = array();
-    for($j = 0; $j < $N2; $j++){
-        for($i = 0; $i < $N1; $i++)
-            $row[$i] = imagecolorat($img, $i, $j);
-        $rows[$j] = dct1D($row);
-    }
-
-    for($i = 0; $i < $N1; $i++){
-        for($j = 0; $j < $N2; $j++)
-            $col[$j] = $rows[$j][$i];
-        //$results[$i] = array_count_values(dct1D($col));
-		$results = array_merge($results, dct1D($col));
-    }
-    return $results;
-}
-
-/*$final = array_count_values(optimizedImgDTC($img));
-krsort($final); 
-echo var_dump($final)."</br>";*/
-
-//var_dump(optimizedImgDTC($img));
 
 ?>

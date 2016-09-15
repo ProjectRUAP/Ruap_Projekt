@@ -26,7 +26,7 @@ $(document).ready(function(){
 function picswap(){
   if($("#file").val().length > 0 ) {
     var s = $("#file").val().split(".");
-    $("#slika").val(s[s.length-1]);
+    $("#slika").val($("#file").val());
     }
   else $("#slika").val("0");
   }
@@ -37,29 +37,32 @@ function readURL(input,string,src) {
                 reader.onload = function (e) {
                     $(string).attr('src', e.target.result);
                     slikaSize = e.target.result.length;
+					$("#screen").css('visibility','visible');
+					picswap();
+					$("#next").submit();
                 }
-
                 reader.readAsDataURL(input.files[0]);
             }
             else if(string.length > 0 && src.lenght > 0 )$(string).attr('src', src);
 
         }
 
+
 </script>
-<div class="pol1" style="text-align: center;">
-<h1>Test inteligencije VS računalo</h1>
 
+<div class="pol1" align="center" style="text-align: center;">
 
+	<div id="screen" align="center" style="text-align:center;">
+	<img src="<?php echo $images."/loading.gif";?>" width="64" height="64" style="position:relative; top:33%"></img>
+	</div>
 
-<form class="bodyform" action="?kraj" method="post">
-
-
-<img class="input_pic" id="tempslika" src="" style="float:right; margin: 0; left: 0px; top: -35px;">
-<input type="hidden" id="slika" name="slika" value="0">
-<input type="file" name="file" id="file" value="Biraj" accept="image/jpg,image/jpeg,image/gif,image/png" onchange="readURL(this,'#tempslika','');picswap();">
-
-<div class="pol2" align="center" style="position: absolute; width: 90%; bottom:5%;">
-<input type="submit" name="action" value="Pokreni!">
+	<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; top:5%;">
+		<img class="input_pic" id="tempslika" width="256" height="256" src="" style="margin: 10%;">
+	</div>
+	<form class="bodyform" id="next" action="?kraj" enctype="multipart/form-data" method="post">
+		<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; bottom:5%;">
+			<input type="hidden" id="slika" name="slika" value="0">
+			<input class="btn_1" type="file" name="file" id="file" value="Biraj" accept="image/jpg,image/jpeg,image/gif,image/png" onchange="readURL(this,'#tempslika','');" style="margin:5px; ">
 </div>
-</form>
+	</form>
 </div>

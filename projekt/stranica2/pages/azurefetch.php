@@ -1,14 +1,50 @@
 <?php
 
+@include "proces.php";
+
+$_SESSION["slika_url"] = "";
 $site = 'https://europewest.services.azureml.net/workspaces/5986524072b54d548170883678b6e32a/services/bb5e438dc29e49ada4f118f62c55ce74/execute?api-version=2.0&details=true';
 $APIKey = 'IiEfGo1N8fPb8ZoYHSPYt79z1kwDpCkOEeYGgcZufM47Z994/aPkH0p4vWh5VSsK9uC7KJhfTZAXqSNYB6VVqQ==';
+$fimage =  $images."/temp";
 
+$allowedExts = array("jpg", "jpeg", "png");
+$nameArray = explode(".", $_FILES["file"]["name"]);
+if (  (($_FILES["file"]["type"] == "image/jpeg")
+	|| ($_FILES["file"]["type"] == "image/png")
+	|| ($_FILES["file"]["type"] == "image/jpeg"))
+	&& ($_FILES["file"]["size"] < 2000000)
+	&& in_array(end($nameArray), $allowedExts)){
+		  if ($_FILES["file"]["error"] > 0){
+			$process = "Greška: ".$_FILES["file"]["error"]."<br>";
+		  }
+		  else{ 
+				$Tdata = basename($nameArray[0]."-".date("dmyhis").".".end($nameArray));
+			    $Tfolder = $fimage."/".$Tdata;
+				
+				if (!file_exists( $Tdata )){
+					if(move_uploaded_file($_FILES["file"]["tmp_name"], $Tfolder)){
+						$_SESSION["slika_url"] = $Tfolder;
+						browseImages($fplocice);
+						//getPicture($Tfolder,1);
+						/*
+						if ($handle = opendir($fimage)) {
+							while (false !== ($file = readdir($handle))) {
+								if(!is_dir($file) && strcmp($file, $Tdata))
+									unlink($fimage.'/'.$file);
+							}
+						}
+						closedir($handle);
+						saveFile($data."/output.csv",$histo);*/
+						
+					} else $process .= "Greška: Slika nije učitana na server!<br>";
+				} else $process .= "Greška: Datoteka postoji!!<br>";
+			  
+			}
+}
+else $process .= "Greška: Nepodržan format (Treba: jpg,jpeg,png)<br>";
 
-f
-
-
+/*
 $postData  = JSONout($_SESSION["zadaci"][$_SESSION["brojac"]][2],$_SESSION["zadaci"][$_SESSION["brojac"]][3]);
-
 $jsCount  = strlen($postData);
  
 
@@ -31,10 +67,8 @@ $response = curl_exec($ch);
 $result = json_decode($response,true);
 $sample1 = explode("+",$result["Results"]["output1"]["value"]["Values"][0][95]);
 
-
-
 curl_close($ch);
-
+*/
 
 
 function JSONout($in1,$in2){
@@ -91,8 +125,7 @@ function JSONout($in1,$in2){
   },
   "GlobalParameters": {}
 }';
-}
-
+};
 
 
 ?>

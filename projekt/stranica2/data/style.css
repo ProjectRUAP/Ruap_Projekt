@@ -9,6 +9,17 @@ h1{
 	font-size:32px;
 }
 
+#screen{
+	z-index:10;
+	position:absolute; 
+	width:100%; 
+	height:100%; 
+	left:0;
+	top:0;
+	visibility: hidden;
+	background-color: rgba(0,0,0,0.5);
+}
+
 #naslov{
 	margin: 0;
 	font-size:36px;
@@ -26,6 +37,17 @@ input{
 input:hover{
 	background-color: #99ccff;
 	color: #333333;
+}
+
+
+input.file {
+	position: relative;
+	text-align: right;
+}
+
+.input_pic{
+	background-color: #aaccdd;
+	border: 1px solid #777777;
 }
 
 
