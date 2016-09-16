@@ -1,8 +1,6 @@
 <?php
 
-$dimen = 256;
-$MODE = 1;
-$cols = 16;
+
 $ii = 0;
 
 $foutput = $images."/plocice";
@@ -35,9 +33,9 @@ function browseImages($target,$dest){
 }
 
 function makeCSV($target,$dir,$file,$dest){
-	global $dimen,$CC,$REZZ,$blocks,$MODE;
+	global $dimen,$CC,$REZZ,$blocks;
 	//echo $target." ".$dir." ".$file."<br>";
-	getPicture($target."/".$dir."/".$file, $blocks,$MODE);
+	getPicture($target."/".$dir."/".$file, $blocks);
 	$f = fopen($dest, "a");
 	if(is_array($REZZ)){
 		foreach($REZZ as $a){
@@ -57,10 +55,10 @@ function makeCSV($target,$dir,$file,$dest){
 }
 
 function fetchCSV($target){
-	global $dimen,$REZZ,$blocks,$MODE;
+	global $dimen,$REZZ,$blocks;
 	$array = array();
 	//echo $target." ".$dir." ".$file."<br>";
-	getPicture($target, $blocks,$MODE);
+	getPicture($target, $blocks);
 	if(is_array($REZZ)){
 		foreach($REZZ as $a){
 			if(is_array($a)){
@@ -78,8 +76,8 @@ function fetchCSV($target){
 	return $array;
 }
 
-function getPicture($URL, $parts,$mode){
-	global $dimen,$CC,$REZZ;
+function getPicture($URL, $parts){
+	global $dimen,$CC,$REZZ,$MODE;
 	$block = intval($dimen / $parts);
 	$img = imagecreatetruecolor($block,$block);
 	$CC = initCoefficients($block);
@@ -94,7 +92,7 @@ function getPicture($URL, $parts,$mode){
 			$jj = $j*$block;
 			imagecopy($img,$org_img, 0, 0, $ii, $jj, $ii+$block, $jj+$block);
 			//imagejpeg($img,$URL.$ii.".jpg",90);
-			switch($mode){
+			switch($MODE){
 				case 0: applyDCT($img,$block); break;
 				case 1: applyRGB($img,$block); break;
 			}
