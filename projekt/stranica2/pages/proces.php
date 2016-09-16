@@ -279,6 +279,7 @@ function sum($a1, $a2){
 }
 
 function resize_image($file, $w, $h, $crop=FALSE) {
+	global $extd;
     list($width, $height) = getimagesize($file);
     $r = $width / $height;
     if ($crop) {
@@ -298,7 +299,10 @@ function resize_image($file, $w, $h, $crop=FALSE) {
             $newwidth = $w;
         }
     }
-    $src = imagecreatefromjpeg($file);
+	if($extd)
+		$src = imagecreatefromjpeg($file);
+	else
+		$src = imagecreatefrompng($file);
     $dst = imagecreatetruecolor($newwidth, $newheight);
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 

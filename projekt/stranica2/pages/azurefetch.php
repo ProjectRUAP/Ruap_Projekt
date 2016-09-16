@@ -6,6 +6,10 @@ $cols = 32;
 $blocks = 8;
 $DEBUG = 0;
 
+$extd = -1;
+if($_FILES["file"]["type"] == "image/jpeg" || $_FILES["file"]["type"] == "image/jpg") $extd = 1;
+if($_FILES["file"]["type"] == "image/png") $extd = 0;
+
 if($MODE == 0){
 	$blocks = 8;
 }else{
@@ -35,9 +39,10 @@ else{
 
 
 
+
 $allowedExts = array("jpg", "jpeg", "png");
 $nameArray = explode(".", $_FILES["file"]["name"]);
-if (  (($_FILES["file"]["type"] == "image/jpeg")
+if (  (($_FILES["file"]["type"] == "image/jpg")
 	|| ($_FILES["file"]["type"] == "image/png")
 	|| ($_FILES["file"]["type"] == "image/jpeg"))
 	&& ($_FILES["file"]["size"] < 2000000)
@@ -107,7 +112,7 @@ if (  (($_FILES["file"]["type"] == "image/jpeg")
 			  
 			}
 }
-else $process .= "Greška: Nepodržan format (Treba: jpg,jpeg,png)<br>";
+else $process .= "Greška: Nepodržan format (Treba: jpg,jpeg,png) ili >2 MB<br>";
 
 
 
