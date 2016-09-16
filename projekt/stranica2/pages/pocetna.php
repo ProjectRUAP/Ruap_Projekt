@@ -57,7 +57,7 @@ function readURL(input,string,src) {
 	</div>
 
 	<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; top:5%;">
-		<img class="input_pic" id="tempslika" width="256" height="256" src="" style="margin: 10%;">
+		<img class="input_pic" id="tempslika" width="256" height="256" src="" style="margin: 2%;">
 	</div>
 	<form class="bodyform" id="next" action="?kraj" enctype="multipart/form-data" method="post">
 		<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; bottom:5%;">

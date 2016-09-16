@@ -24,9 +24,12 @@ if (  (($_FILES["file"]["type"] == "image/jpeg")
 				if (!file_exists( $Tdata )){
 					if(move_uploaded_file($_FILES["file"]["tmp_name"], $Tfolder)){
 						$_SESSION["slika_url"] = $Tfolder;
-						browseImages($fplocice);
-						//getPicture($Tfolder,1);
-						/*
+						
+						browseImages($fplocice,$data."/output.csv");
+						
+						
+						//getPicture($Tfolder,$blocks);
+						
 						if ($handle = opendir($fimage)) {
 							while (false !== ($file = readdir($handle))) {
 								if(!is_dir($file) && strcmp($file, $Tdata))
@@ -34,7 +37,7 @@ if (  (($_FILES["file"]["type"] == "image/jpeg")
 							}
 						}
 						closedir($handle);
-						saveFile($data."/output.csv",$histo);*/
+						//saveFile($data."/output.csv",$histo);
 						
 					} else $process .= "Greška: Slika nije učitana na server!<br>";
 				} else $process .= "Greška: Datoteka postoji!!<br>";

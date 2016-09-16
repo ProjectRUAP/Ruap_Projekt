@@ -25,7 +25,7 @@ echo '</h2>';
 <div class="pol2" align="center" style="">
 <?php
 if(strlen($process) < 1)
-	echo '<img class="input_pic" id="tempslika" width="256" height="256" src="'.$_SESSION["slika_url"].'" style="margin: 5%;">';
+	echo '<img class="input_pic" id="tempslika" width="256" height="256" src="'.$_SESSION["slika_url"].'" style="margin: 2%;">';
 ?>
 </div>
 
