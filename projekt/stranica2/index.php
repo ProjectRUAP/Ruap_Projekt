@@ -78,7 +78,7 @@ session_start();
 <div id="popup">
 </div>
 <div align="center">
-<table class="frame" style="padding-top: 5%; height: 90%; width: 70%">
+<table class="frame" style="padding-top: 2%; height: 96%; width: 70%">
 <tr>
 <td id="top" colspan="2" style="height: 15%; background-color: #dedeff">
 <?php

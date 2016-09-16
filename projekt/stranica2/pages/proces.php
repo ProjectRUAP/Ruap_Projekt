@@ -1,17 +1,18 @@
 <?php
 
 $dimen = 256;
-$blocks = 1;
+$MODE = 1;
 $cols = 16;
-$fplocice = $images."/plocice";
+$ii = 0;
+
 $foutput = $images."/plocice";
 
 $process = "";
 $picture = 0;
-$CC;
-$histo;
+$REZZ;
 
 function browseImages($target,$dest){
+	
 	fopen($dest, "w");
 	if ($handle = opendir($target)) {
 		while (false !== ($file = readdir($handle))) {
@@ -34,49 +35,78 @@ function browseImages($target,$dest){
 }
 
 function makeCSV($target,$dir,$file,$dest){
-	global $dimen,$CC,$histo,$blocks;
+	global $dimen,$CC,$REZZ,$blocks,$MODE;
 	//echo $target." ".$dir." ".$file."<br>";
-	getPicture($target."/".$dir."/".$file, $blocks);
+	getPicture($target."/".$dir."/".$file, $blocks,$MODE);
 	$f = fopen($dest, "a");
-	if(is_array($histo))
-		foreach($histo as $a){
-			if(is_array($a))
+	if(is_array($REZZ)){
+		foreach($REZZ as $a){
+			if(is_array($a)){
 				foreach($a as $b){
 					fwrite($f, $b.",");
 				}
+				//fwrite($f, "\n"); // testeri
+			}
 			else fwrite($f, $a.",");
+			//fwrite($f, "\n");  // testeri
 		}
-	else fwrite($f,$array);
+		//fwrite($f, "\n");  // testeri
+	}
+	else fwrite($f,$REZZ.",");
 	fwrite($f,$dir."\n");
 }
 
-function getPicture($URL, $parts){
-	global $dimen,$CC,$histo;
+function fetchCSV($target){
+	global $dimen,$REZZ,$blocks,$MODE;
+	$array = array();
+	//echo $target." ".$dir." ".$file."<br>";
+	getPicture($target, $blocks,$MODE);
+	if(is_array($REZZ)){
+		foreach($REZZ as $a){
+			if(is_array($a)){
+				foreach($a as $b){
+					
+					$array[] = $b;
+					
+				}
+			}
+			else $array[] = $a;
+		}
+	}
+	else $array[] = $REZZ;
+	//$array[] = "null";	
+	return $array;
+}
+
+function getPicture($URL, $parts,$mode){
+	global $dimen,$CC,$REZZ;
 	$block = intval($dimen / $parts);
-	$CC = initCoefficients($block);
 	$img = imagecreatetruecolor($block,$block);
+	$CC = initCoefficients($block);
 	//$org_img = imagecreatefromjpeg($URL);
 	$org_img =  resize_image($URL,$dimen,$dimen,TRUE);
 	//$ims = getimagesize($URL);
-	//imagejpeg($org_img,$URL."2.jpg",90);
-	
+	//imagejpeg($org_img,$URL."aas.jpg",90);
+	$REZZ = array();
 	for($i = 0 ; $i < $parts ; $i++){
 		$ii = $i*$block;
 		for($j = 0 ; $j < $parts ; $j++){
 			$jj = $j*$block;
 			imagecopy($img,$org_img, 0, 0, $ii, $jj, $ii+$block, $jj+$block);
 			//imagejpeg($img,$URL.$ii.".jpg",90);
-			
-			//applyDCT($img,$block);
-			applyRGB($img,$block);
-			//var_dump($histo);
+			switch($mode){
+				case 0: applyDCT($img,$block); break;
+				case 1: applyRGB($img,$block); break;
+			}
+
+			//var_dump($REZZ);
 			//die();
 			//$h =applyDCT($img,$block));
 		}
 	}
-	//array_multisort($histo,SORT_DESC);
-
-	//var_dump($histo);
+	//array_multisort($REZZ,SORT_DESC);
+	
+	//var_dump($REZZ);
 
 }
 
@@ -122,8 +152,8 @@ function  initCoefficients($size) {
 }
 
 function applyDCT($img,$block) {
-	global $CC,$histo;
-	$histo = array();
+	global $CC,$REZZ,$ii;
+	//$REZZ = array();
     //$color=array();
 	//$ii = 0;
 	/*for($i=0;$i<$block;$i++)
@@ -138,8 +168,8 @@ function applyDCT($img,$block) {
 	//$sum2=0;
 	$u = 0;
 	//$v = 0;
-    //for ($u=0;$u<128;$u++) {
-		for ($v=0;$v<128;$v++) {
+    //for ($u=0;$u<$block;$u++) {
+		for ($v=0;$v<$block;$v++) {
 
 			for ($i=0;$i<$block;$i++) {
 				for ($j=0;$j<$block;$j++) {
@@ -149,13 +179,13 @@ function applyDCT($img,$block) {
 			//$ii++;
 			$sum *=(2/$block);
 			//$F[$u][$v] = $sum;
-			$histo[] = $sum;
+			$REZZ[] = $sum;
 		  }
-			
+		//$ii++;	
     //}
-	//array_multisort($histogram,SORT_DESC);
-	//$histogram = array_slice($histogram,0,128);
-    //return array_chunk($histogram,128);
+	//array_multisort($REZZ,SORT_DESC);
+	//$REZZgram = array_slice($REZZgram,0,128);
+    //return array_chunk($REZZgram,128);
 }
 
 /*var_dump(applyDCT($img));
@@ -192,12 +222,12 @@ function histogram($array, $cols, $min = 1, $max = 0){
 }
 
 function applyRGB($img,$block){
-	global $histo,$cols;
-	//$histo = array();
-	if(!isset($histo)){
-		$histo['red'] = array();
-		$histo['green']  = array();
-		$histo['blue'] = array();
+	global $REZZ,$cols;
+	//$REZZ = array();
+	if(!isset($REZZ['red'])){
+		$REZZ['red'] = array();
+		$REZZ['green']  = array();
+		$REZZ['blue'] = array();
 	}
 	for ($y = 0; $y < $block; $y++){
 		for ($x = 0; $x < $block; $x++){
@@ -206,23 +236,47 @@ function applyRGB($img,$block){
 			$tmp['green'][] = $rgb['green'];//($rgb >> 8) & 0xFF;
 			$tmp['blue'][] = $rgb['blue'];//$rgb & 0xFF;
 		} 
-		//array_multisort($r,SORT_DESC);		//
-		//array_multisort($g,SORT_DESC);		//	SPORIJE
-		//array_multisort($b,SORT_DESC);		//
-		//$tmp['red'] = $r;//*/histogram($r, $cols,0,254);		//
-		//$tmp['green'] = $g;//*/histogram($g, $cols,0,254);		// SPORIJE
-		//$tmp['blue'] = $b;//*/histogram($b, $cols,0,254);		//
 	}	
 		array_multisort($tmp,SORT_DESC);
-		//$histo['red'] =histogram($tmp['red'], $cols,0,254);
-		//$histo['green']=histogram($tmp['green'], $cols,0,254);
-		//$histo['blue']=histogram($tmp['blue'], $cols,0,254);
-		$histo['red'] = array_map("sum",$histo['red'],histogram($tmp['red'], $cols,0,254));
-		$histo['green'] = array_map("sum",$histo['green'],histogram($tmp['green'], $cols,0,254));
-		$histo['blue'] = array_map("sum",$histo['blue'],histogram($tmp['blue'], $cols,0,254));
+		//$REZZ['red'] =histogram($tmp['red'], $cols,0,254);
+		//$REZZ['green']=histogram($tmp['green'], $cols,0,254);
+		//$REZZ['blue']=histogram($tmp['blue'], $cols,0,254);
+		$REZZ['red'] = array_map("sum",$REZZ['red'],histogram($tmp['red'], $cols,0,254));
+		$REZZ['green'] = array_map("sum",$REZZ['green'],histogram($tmp['green'], $cols,0,254));
+		$REZZ['blue'] = array_map("sum",$REZZ['blue'],histogram($tmp['blue'], $cols,0,254));
 
 }
+
+function applyRGBblocks($img,$block){
+	global $REZZ,$cols;
+	//$REZZ = array();
+	if(!isset($REZZ['red'])){
+		$REZZ['red'] = array();
+		$REZZ['green']  = array();
+		$REZZ['blue'] = array();
+	}
+	for ($y = 0; $y < $block; $y++){
+		for ($x = 0; $x < $block; $x++){
+			$rgb = imagecolorsforindex($img, imagecolorat($img, $x, $y));
+			$tmp['red'][] = $rgb['red'];//($rgb >> 16) & 0xFF;
+			$tmp['green'][] = $rgb['green'];//($rgb >> 8) & 0xFF;
+			$tmp['blue'][] = $rgb['blue'];//$rgb & 0xFF;
+		} 
+	}	
+		array_multisort($tmp,SORT_DESC);
+		$REZZ['red'] =histogram($tmp['red'], $cols,0,254);
+		$REZZ['green']=histogram($tmp['green'], $cols,0,254);
+		$REZZ['blue']=histogram($tmp['blue'], $cols,0,254);
+		//$REZZ['red'] = array_map("sum",$REZZ['red'],histogram($tmp['red'], $cols,0,254));
+		//$REZZ['green'] = array_map("sum",$REZZ['green'],histogram($tmp['green'], $cols,0,254));
+		//$REZZ['blue'] = array_map("sum",$REZZ['blue'],histogram($tmp['blue'], $cols,0,254));
+
+}
+
 function sum($a1, $a2){
+	//if($a1 == null) $a1 = 0;
+	//if($a2 == null) $a2 = 0;
+	//echo $a1."-".$a2."<br>";
     return($a1+$a2);
 }
 
