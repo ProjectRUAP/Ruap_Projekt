@@ -7,8 +7,15 @@ $blocks = 8;
 $DEBUG = 0;
 
 $extd = -1;
-if($_FILES["file"]["type"] == "image/jpeg" || $_FILES["file"]["type"] == "image/jpg") $extd = 1;
-if($_FILES["file"]["type"] == "image/png") $extd = 0;
+$generic = 0;
+
+if(strlen($_POST["slika"]) > 0){
+	$extd = 1;
+	$generic = 1;
+}else{
+	if($_FILES["file"]["type"] == "image/jpeg" || $_FILES["file"]["type"] == "image/jpg") $extd = 1;
+	if($_FILES["file"]["type"] == "image/png") $extd = 0;
+}
 
 if($MODE == 0){
 	$blocks = 8;
@@ -39,24 +46,36 @@ else{
 
 
 
-
 $allowedExts = array("jpg", "jpeg", "png");
 $nameArray = explode(".", $_FILES["file"]["name"]);
-if (  (($_FILES["file"]["type"] == "image/jpg")
+if ( $generic || ((($_FILES["file"]["type"] == "image/jpg")
 	|| ($_FILES["file"]["type"] == "image/png")
 	|| ($_FILES["file"]["type"] == "image/jpeg"))
 	&& ($_FILES["file"]["size"] < 2000000)
-	&& in_array(end($nameArray), $allowedExts)){
-		  if ($_FILES["file"]["error"] > 0){
+	&& in_array(end($nameArray), $allowedExts))){
+		  if (!$generic && $_FILES["file"]["error"] > 0){
 			$process = "Greška: ".$_FILES["file"]["error"]."<br>";
 		  }
 		  else{ 
-				$Tdata = basename($nameArray[0]."-".date("dmyhis").".".end($nameArray));
-			    $Tfolder = $fimage."/".$Tdata;
+				if(!$generic){
+					$Tdata = basename($nameArray[0]."-".date("dmyhis").".".end($nameArray));
+					$Tfolder = $fimage."/".$Tdata;
+					
+				}
+				else{
+					$Tfolder = $_POST["slika"];
+					$_SESSION["slika_url"] = $Tfolder;
+					
+				}
 				
-				if (!file_exists( $Tdata )){
-					if(move_uploaded_file($_FILES["file"]["tmp_name"], $Tfolder)){
-						$_SESSION["slika_url"] = $Tfolder;
+				if ($generic || !file_exists( $Tdata )){
+					
+					if(!$generic)
+						if(move_uploaded_file($_FILES["file"]["tmp_name"], $Tfolder))
+							$_SESSION["slika_url"] = $Tfolder;
+						else $process .= "Greška: Slika nije učitana na server!<br>";
+					
+					
 					if($DEBUG)switch(1){
 							case 0: browseImages($fplocice,$data."/outputDCT128.csv",0); break;
 							case 1: browseImages($fplocice,$data."/outputDCT128v8.csv",0); break;
@@ -96,8 +115,41 @@ if (  (($_FILES["file"]["type"] == "image/jpg")
 						else 
 							$result = $result["Results"]["output1"]["value"]["Values"][0][106]; // RGB: 58 , 106  DCT: 2058
 						curl_close($ch);
+						
+						$_SESSION["rezz"] = $result;
+			
+						
+						if($_SESSION["backsite"] == "pocetna"){
+								
+								$query= "SELECT count(rezz) as count FROM ".$db_testovi." WHERE test='".($result)."' AND rezz=1";
+								//echo $query;
+								if (!($q=@mysql_query($query)))
+									$logerr = "2Neuspjelo slanje upita bazi!";
+								if (@mysql_num_rows($q)==0 && !$logerr)
+								  $logerr = "Prazan red!";
+								else if(!$logerr){
+								  while(($redak = @mysql_fetch_array($q) )) 
+									  //echo var_dump($redak);
+										$Kistih = $redak[0];
+								}
+								$query= "SELECT count(rezz) as count FROM ".$db_testovi." WHERE test='".($result)."'";
+								//echo $query;
+								if (!($q=@mysql_query($query)) && !$logerr)
+									$logerr = "2Neuspjelo slanje upita bazi!";
+								if (@mysql_num_rows($q)==0 && !$logerr)
+								  $logerr = "Prazan red!";
+								else if(!$logerr){
+								  while(($redak = @mysql_fetch_array($q) )) 
+									  //echo var_dump($redak);
+										$_SESSION["postotak"] = floor($Kistih/$redak[0]*100);
+								}
+								
+								
+							}
+						
+						
 					}
-					
+						
 						if ($handle = opendir($fimage)) {
 							while (false !== ($file = readdir($handle))) {
 								if(!is_dir($file) && strcmp($file, $Tdata))
@@ -105,9 +157,9 @@ if (  (($_FILES["file"]["type"] == "image/jpg")
 							}
 						}
 						closedir($handle);
+						
 						//saveFile($data."/output.csv",$histo);
 						
-					} else $process .= "Greška: Slika nije učitana na server!<br>";
 				} else $process .= "Greška: Datoteka postoji!!<br>";
 			  
 			}

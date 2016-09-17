@@ -24,9 +24,7 @@ session_start();
  
  $dbhost = "eu-cdbr-azure-north-e.cloudapp.net";
  $dbase = "project_iq_kviz";
- $db_testovi = $dbase.".testovi";
- $db_zadaci = $dbase.".zadaci";
- $db_data =  $dbase.".bgdata";
+ $db_testovi = $dbase.".plocice_data";
  $dbuser = "bb3e7efc984029";
  $dbpass = "a0f2f9c8";
  
@@ -34,7 +32,6 @@ session_start();
  $loginz = false;
  $logerr = 0;
  
-	/*if(isset($_SESSION["backsite"])){	
 		if(!($con = @mysql_connect($dbhost, $dbuser, $dbpass)))
 		  $logerr = "Neuspjelo spajanje na MySQL!";
 		mysql_set_charset('utf8',$con);
@@ -42,8 +39,8 @@ session_start();
 		  $logerr = "Neuspjelo spajanje na bazu podataka!";
 		else{
 		  // Spoj na bazu
-		  if($_SESSION["backsite"] == "pocetna"){
-			/*$query= "SELECT * FROM ".$db_zadaci." WHERE 1";
+		  /*if($_SESSION["backsite"] == "pocetna"){
+			$query= "SELECT * FROM ".$db_testovi." WHERE 1";
 			if (!($q=@mysql_query($query)) && !$logerr)
 				$logerr = "Neuspjelo slanje upita bazi!";
 			if (@mysql_num_rows($q)==0 && !$logerr)
@@ -57,11 +54,11 @@ session_start();
 							$max_zad = count($_SESSION["zadaci"]);
 					 $_SESSION["max_zad"] = $max_zad;
 				} else echo $logerr;
-			}
+			}*/
 		}
-	
-	}*/
 
+echo $logerr;
+		
 ?>
 
 <html>

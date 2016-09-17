@@ -68,6 +68,19 @@ input.file {
 	background-color: rgba(0,0,0,0);
 	border:0px;
 }
+.frame2 tr td a{
+background-color: #0080ff;
+	color: #ffffff;
+	border: 1px ;
+	border-radius: 5px;
+	-webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.frame2 tr td a:hover{
+	background-color: #99ccff;
+	color: #333333;
+}
 
 .btn_1{
 	font-size:20px;	
