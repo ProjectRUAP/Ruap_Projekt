@@ -85,7 +85,7 @@ session_start();
 // Header
 
 ?>
-<h1 id="naslov"> PREPOZNAVANJE PLOĆICA </h1>
+<h1 id="naslov"> PREPOZNAVANJE PLOČICA </h1>
 </td>
 </tr>
 <tr >
