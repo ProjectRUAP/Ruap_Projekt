@@ -25,6 +25,14 @@ h1{
 	font-size:36px;
 }
 
+.pick img{
+	border: 0;
+}
+
+.pick img:hover{
+	border: 1px solid darkblue;
+}
+
 input{
 	background-color: #0080ff;
 	color: #ffffff;

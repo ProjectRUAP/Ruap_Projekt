@@ -78,8 +78,8 @@ function izbor(samp){
 	</table>
 	</div>
 	<div id="droppic"class="pol2" align="center" style="">
-	<a onclick="picswap(1);"><img id="picpic1" src="" width="128" height="128" style=""/></img></a>
-	<a onclick="picswap(0);"><img id="picpic2" src="" width="128" height="128" style=""/></img></a>
+	<a class ="pick" onclick="picswap(1);"><img id="picpic1" src="" width="128" height="128" style=""/></img></a>
+	<a class ="pick" onclick="picswap(0);"><img id="picpic2" src="" width="128" height="128" style=""/></img></a>
 	</div>
 
 	<div id="screen" align="center" style="">
@@ -89,7 +89,7 @@ function izbor(samp){
 		<img class="input_pic" id="tempslika" width="128" height="128" src="" style="margin: 2%;">
 	</div>
 	<form class="bodyform" id="next" action="?kraj" enctype="multipart/form-data" method="post">
-		<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; bottom:5%;">
+		<div class="pol2" align="center" style="margin-left: 2%; position: absolute; width: 90%; bottom:10%;">
 			<input type="hidden" id="slika" name="slika" value="0">
 			<input class="btn_1" type="file" name="file" id="file" value="Biraj" accept="image/jpg,image/jpeg,image/gif,image/png" onchange="readURL(this,'#tempslika','');" style="margin:5px; ">
 </div>
